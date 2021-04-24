@@ -1,31 +1,32 @@
 // from data.js
-var tableData = data;
+const tableData = data;
 
 // Grab the table body
-var tbody = d3.select("tbody");
+const tbody = d3.select("tbody");
 
-// Grab date entered
-var dateEntered = d3.select("#datetime").value;
+// Build table on page load
+if (d3.select("#datetime").property("value")) {
+    console.log(d3.select("#datetime").property("value"))
+} else {
+    buildTable(tableData)
+}
 
-// Handle input change
-d3.select("#datetime").on("change", function() {
-    newDate = d3.event.target.value;
-    console.log(`New Date Entered: ${newDate}`)
-  });
-
+// Handle "Filter Table" button click and form submit
+d3.selectAll("#filter-btn").on("click", filterTable);
+d3.selectAll("#form").on("submit", filterTable);
 
 // Function for filtering data and appending to table
-function filterTable(date) {  
+function filterTable() { 
+    // Grab date entered 
+    const date = d3.select("#datetime").property("value");
     console.log(`Filtering data to: ${date}....`)
-    tbody.html("");
-    filteredData = []
+    let filteredData = tableData
     if (date) {
-        tableData.forEach(element => {
-            if (element.datetime === date) {
-                filteredData.push(element)
-            }
-        })
-        console.log(`Data has been filtered to: ${date}`)
+        filteredData = filteredData.filter(row => row.datetime === date);
+        console.log(`Data has been filtered to ${date}`)
+        console.log(filteredData)
+        // console.log('Truncating table')
+        // tbody.html("");
         buildTable(filteredData)
     } else {
         console.log('Could not filter table. Please enter a date.')
@@ -33,10 +34,11 @@ function filterTable(date) {
   };
 
 // Build table. Will be called to initiallize table on load, then to filter table
-function buildTable(data) {
-    console.log('Building table....')
+function buildTable(dataset) {
+    console.log('Truncating table....')
     tbody.html("");
-    if (data) {
+    console.log('Building table....')
+    if (dataset) {
         tableData.forEach(element => {
             var row = tbody.append("tr");
             Object.entries(element).forEach(([key, value]) => {
@@ -44,18 +46,9 @@ function buildTable(data) {
                 cell.text(value);
             })
         })
-        console.log('Table has been built.')    
+        console.log('Table has been built.')   
+    } else {
+        console.log('Dataset is empty. Could not load table.')
     }
 }
-
-// Build table on page load
-buildTable(tableData)
-
-// Handle "Filter Table" button click and form submit
-console.log(d3.select("#datetime").value)
-
-// d3.selectAll("#filter-btn").on("click", filterTable(d3.select("#datetime").value));
-
-
-
 

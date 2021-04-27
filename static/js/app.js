@@ -5,15 +5,15 @@ const tableData = data;
 const tbody = d3.select("tbody");
 
 // Build table on page load
-if (d3.select("#datetime").property("value")) {
-    console.log(d3.select("#datetime").property("value"))
-} else {
-    buildTable(tableData)
-}
+//if (d3.select("#datetime").property("value")) {
+//    console.log(d3.select("#datetime").property("value"))
+//} else {
+//    buildTable(tableData)
+//}
 
 // Handle "Filter Table" button click and form submit
 d3.selectAll("#filter-btn").on("click", filterTable);
-d3.selectAll("#form").on("submit", filterTable);
+//d3.selectAll("#form").on("submit", filterTable);
 
 // Function for filtering data and appending to table
 function filterTable() { 
@@ -39,7 +39,7 @@ function buildTable(dataset) {
     tbody.html("");
     console.log('Building table....')
     if (dataset) {
-        tableData.forEach(element => {
+        dataset.forEach(element => {
             var row = tbody.append("tr");
             Object.entries(element).forEach(([key, value]) => {
                 var cell = row.append("td");
@@ -52,3 +52,4 @@ function buildTable(dataset) {
     }
 }
 
+buildTable(tableData);
